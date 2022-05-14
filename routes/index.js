@@ -307,33 +307,33 @@ router.post('/login', (req, res) => {
 
 // });
 
-router.post('/publica', upload.single("imagem"), (req, res) => {
+// router.post('/publica', upload.single("imagem"), (req, res) => {
 
-  if (req.body.titulo_publica == ''){
-    console.log("Música inválida");
-  }
-  else{
-    let newPost = new Postagem({
-      texto: req.body.titulo_publica.trim(),
-      author: '1256478979',
-      imagem: './lua.jpg'
-    });
+//   if (req.body.titulo_publica == ''){
+//     console.log("Música inválida");
+//   }
+//   else{
+//     let newPost = new Postagem({
+//       texto: req.body.titulo_publica.trim(),
+//       author: '1256478979',
+//       imagem: './lua.jpg'
+//     });
 
-    newPost.save().then(user => {    
-      console.log('Musica salva com sucesso!')
-      res.end(JSON.stringify(user));
-    });  
-  }
-});
+//     newPost.save().then(user => {    
+//       console.log('Musica salva com sucesso!')
+//       res.end(JSON.stringify(user));
+//     });  
+//   }
+// });
 
-router.get('/musicas', (req, res) => {
-  console.log('Musicas');
-  Postagem.find({texto: new RegExp(req.body.search)}).then((items) => {
-    res.end(JSON.stringify(items));
-  }).catch((err) => {
-    console.log('As músicas não foram carregadas')
-  }) 
+// router.get('/musicas', (req, res) => {
+//   console.log('Musicas');
+//   Postagem.find({texto: new RegExp(req.body.search)}).then((items) => {
+//     res.end(JSON.stringify(items));
+//   }).catch((err) => {
+//     console.log('As músicas não foram carregadas')
+//   }) 
 
-});
+// });
 
 module.exports = router
