@@ -1,7 +1,7 @@
 // Módulos
-var express = require('express');
+///var express = require('express');
 var mongoose = require('mongoose');
-var app = express();
+///var app = express();
 var index = require('./routes/index.js');
 const path = require("path")
 multer = require('multer');
@@ -16,9 +16,9 @@ app.use(cookieParser());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static("public"));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.static("public"));
 
 mongoose.Promise = global.Promise;
 
