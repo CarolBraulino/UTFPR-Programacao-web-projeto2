@@ -79,103 +79,103 @@ router.route('/pesquisa').get(verifyJWT, (req, res) => {
 
 //realizando operações no bd
 
-router.post('/cadastrar', (req, res) => {
-    var erros = []
+// router.post('/cadastrar', (req, res) => {
+//     var erros = []
 
-    if(!req.body.email || typeof req.body.email == undefined || req.body.email == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.senha || typeof req.body.senha == undefined || req.body.senha == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.datanasc || typeof req.body.datanasc == undefined || req.body.datanasc == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.rua || typeof req.body.rua == undefined || req.body.rua == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.numero || typeof req.body.numero == undefined || req.body.numero == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.complemento || typeof req.body.complemento == undefined || req.body.complemento == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.cidade || typeof req.body.cidade == undefined || req.body.cidade == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.estado || typeof req.body.estado == undefined || req.body.estado == null){
-        erros.push({texto: "Dado inválido"})
-    }
-    if(!req.body.pais || typeof req.body.pais == undefined || req.body.pais == null){
-        erros.push({texto: "Dado inválido"})
-    }
+//     if(!req.body.email || typeof req.body.email == undefined || req.body.email == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.senha || typeof req.body.senha == undefined || req.body.senha == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.datanasc || typeof req.body.datanasc == undefined || req.body.datanasc == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.rua || typeof req.body.rua == undefined || req.body.rua == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.numero || typeof req.body.numero == undefined || req.body.numero == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.complemento || typeof req.body.complemento == undefined || req.body.complemento == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.cidade || typeof req.body.cidade == undefined || req.body.cidade == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.estado || typeof req.body.estado == undefined || req.body.estado == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
+//     if(!req.body.pais || typeof req.body.pais == undefined || req.body.pais == null){
+//         erros.push({texto: "Dado inválido"})
+//     }
 
-    if(erros.length > 0){
-        res.render('cadastro')
-        console.log('Dados inválidos')
-    }
-    else{
+//     if(erros.length > 0){
+//         res.render('cadastro')
+//         console.log('Dados inválidos')
+//     }
+//     else{
 
-        Usuario.findOne({email: req.body.email}).then((usuario) => {
-            if(usuario){
-                console.log("Usuario já existente")
-                // req.flash("erro_msg", "Já existe este usuário")
-                res.render('cadastro')
+//         Usuario.findOne({email: req.body.email}).then((usuario) => {
+//             if(usuario){
+//                 console.log("Usuario já existente")
+//                 // req.flash("erro_msg", "Já existe este usuário")
+//                 res.render('cadastro')
 
-             }else{
-                const novoCadastro = new Usuario({
-                    email: req.body.email,
-                    senha: req.body.senha,
-                    datanasc: req.body.datanasc,
-                    nome: req.body.nome,
-                    rua: req.body.rua,
-                    numero: req.body.numero,
-                    complemento: req.body.complemento,
-                    cidade: req.body.cidade,
-                    estado: req.body.estado,
-                    pais: req.body.pais
-                })
-                bcrypt.genSalt(10, (erro, salt)=>{
-                    bcrypt.hash(novoCadastro.senha, salt, (erro, hash) =>{
-                        if(erro){
-                            res.render('index')
-                        }
-                        new Usuario(novoCadastro).save().then(() =>{
-                               res.redirect('/')
-                            }).catch((err) =>{
-                              console.log("Erro durante o cadastro!", err)
-                            })      
-                    })
-                })
+//              }else{
+//                 const novoCadastro = new Usuario({
+//                     email: req.body.email,
+//                     senha: req.body.senha,
+//                     datanasc: req.body.datanasc,
+//                     nome: req.body.nome,
+//                     rua: req.body.rua,
+//                     numero: req.body.numero,
+//                     complemento: req.body.complemento,
+//                     cidade: req.body.cidade,
+//                     estado: req.body.estado,
+//                     pais: req.body.pais
+//                 })
+//                 bcrypt.genSalt(10, (erro, salt)=>{
+//                     bcrypt.hash(novoCadastro.senha, salt, (erro, hash) =>{
+//                         if(erro){
+//                             res.render('index')
+//                         }
+//                         new Usuario(novoCadastro).save().then(() =>{
+//                                res.redirect('/')
+//                             }).catch((err) =>{
+//                               console.log("Erro durante o cadastro!", err)
+//                             })      
+//                     })
+//                 })
             
-                //new Usuario(novoCadastro).save().then(function () {
-                    //res.flash("sucesso_msg", "Sucesso!"),
-                    //console.log("Usuario cadastrado com sucesso!")
-                //})
-            }
-        })        
-    }
-})
+//                 //new Usuario(novoCadastro).save().then(function () {
+//                     //res.flash("sucesso_msg", "Sucesso!"),
+//                     //console.log("Usuario cadastrado com sucesso!")
+//                 //})
+//             }
+//         })        
+//     }
+// })
 
 
-//new RegExp(/(query)*/
+// //new RegExp(/(query)*/
 
-/*router.post('/pesquisa', (req, res) => {
-    var query = req.query.pesq;
-    Postagem.find({texto: new RegExp(query)}).then((items) => {
-        res.render('pesquisar', {items: items})
-    }).catch((err) => {
-        console.log('As músicas não foram carregadas')
-        res.render('home',  {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]})
-    }) 
-})*/
+// /*router.post('/pesquisa', (req, res) => {
+//     var query = req.query.pesq;
+//     Postagem.find({texto: new RegExp(query)}).then((items) => {
+//         res.render('pesquisar', {items: items})
+//     }).catch((err) => {
+//         console.log('As músicas não foram carregadas')
+//         res.render('home',  {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]})
+//     }) 
+// })*/
 
-/*router.get('/', (req, res) => {    
-    res.redirect('pesquisar');
-  });*/
+// /*router.get('/', (req, res) => {    
+//     res.redirect('pesquisar');
+//   });*/
   
   router.route('/postagem').get(verifyJWTAdmin, (req, res) => {
     res.render('postagem', { user: req.cookies.userid });
