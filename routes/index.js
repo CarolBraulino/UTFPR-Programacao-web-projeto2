@@ -177,123 +177,123 @@ router.route('/pesquisa').get(verifyJWT, (req, res) => {
 //     res.redirect('pesquisar');
 //   });*/
   
-  router.route('/postagem').get(verifyJWTAdmin, (req, res) => {
-    res.render('postagem', { user: req.cookies.userid });
-  });
+//   router.route('/postagem').get(verifyJWTAdmin, (req, res) => {
+//     res.render('postagem', { user: req.cookies.userid });
+//   });
   
-var storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, './public/uploads/');
-    },
-    filename: (req, file, cb) => {
-      cb(
-        null,
-        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-      );
-    }
-});
-var upload = multer({ storage: storage });
+// var storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//       cb(null, './public/uploads/');
+//     },
+//     filename: (req, file, cb) => {
+//       cb(
+//         null,
+//         file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+//       );
+//     }
+// });
+// var upload = multer({ storage: storage });
 
-router
-  .route('/postar')
-  .post(verifyJWTAdmin, upload.single("imagem"), (req, res) => {
-    console.log("BODY", req.body);
-    console.log("IMAGEM", req.file);
-    if (req.body) {
-      let mensagem = [];
-      if (
-        req.body.texto === "" ||
-        req.body.texto === null ||
-        req.body.texto === undefined
-      ) {
-        console.log("O campo titulo é obrigatório!");
-      }
-      if (
-        req.cookies.userid === "" ||
-        req.cookies.userid === null ||
-        req.cookies.userid === undefined
-      ) {
-        console.log("Autor não informado!");
-      }
+// router
+//   .route('/postar')
+//   .post(verifyJWTAdmin, upload.single("imagem"), (req, res) => {
+//     console.log("BODY", req.body);
+//     console.log("IMAGEM", req.file);
+//     if (req.body) {
+//       let mensagem = [];
+//       if (
+//         req.body.texto === "" ||
+//         req.body.texto === null ||
+//         req.body.texto === undefined
+//       ) {
+//         console.log("O campo titulo é obrigatório!");
+//       }
+//       if (
+//         req.cookies.userid === "" ||
+//         req.cookies.userid === null ||
+//         req.cookies.userid === undefined
+//       ) {
+//         console.log("Autor não informado!");
+//       }
 
-      if (mensagem.length > 0) {
-        res.render('postar', { mensagem });
-      } else {
-        console.log("FILE", req.file);
-        console.log("BODY", req.body);
-        let newPost = new Postagem({
-          texto: req.body.texto.trim(),
-          author: req.cookies.userid,
-          imagem: req.file !== undefined ? "/uploads/" + req.file.filename : null
-        });
+//       if (mensagem.length > 0) {
+//         res.render('postar', { mensagem });
+//       } else {
+//         console.log("FILE", req.file);
+//         console.log("BODY", req.body);
+//         let newPost = new Postagem({
+//           texto: req.body.texto.trim(),
+//           author: req.cookies.userid,
+//           imagem: req.file !== undefined ? "/uploads/" + req.file.filename : null
+//         });
 
-        newPost.save().then(user => {
-          res.render('home',  {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]});
-          console.log('Musica salva com sucesso!')
-        });
-      }
-    }
-  });
+//         newPost.save().then(user => {
+//           res.render('home',  {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]});
+//           console.log('Musica salva com sucesso!')
+//         });
+//       }
+//     }
+//   });
 
-router.get('/login', (req, res) => {
-    if (req.cookies.token) {
-        res.redirect("/home");
-    } else {
-      res.render('index');
-    }
-});
+// router.get('/login', (req, res) => {
+//     if (req.cookies.token) {
+//         res.redirect("/home");
+//     } else {
+//       res.render('index');
+//     }
+// });
 
-router.post('/login', (req, res) => {
-    if (req.body) {
-        let mensagem = [];
-        if (req.body.login === '' || req.body.login === null) {
-          mensagem.push('O campo email é obrigatório!');
-        }
-        if (req.body.senha === '' || req.body.senha === null) {
-          mensagem.push('O campo senha é obrigatório!');
-        }
+// router.post('/login', (req, res) => {
+//     if (req.body) {
+//         let mensagem = [];
+//         if (req.body.login === '' || req.body.login === null) {
+//           mensagem.push('O campo email é obrigatório!');
+//         }
+//         if (req.body.senha === '' || req.body.senha === null) {
+//           mensagem.push('O campo senha é obrigatório!');
+//         }
     
-        if (mensagem.length > 0) {
-          res.render('index', { mensagem });
-        } 
-        else {
-            require("../models/usuarios")
-            const Usuario = mongoose.model('usuarios')
-            Usuario.find({
-                email: req.body.login,
-                senha: req.body.senha
-          }).then(result => {
-                if (result.length !== 0) {
-                    const user = result[0];
+//         if (mensagem.length > 0) {
+//           res.render('index', { mensagem });
+//         } 
+//         else {
+//             require("../models/usuarios")
+//             const Usuario = mongoose.model('usuarios')
+//             Usuario.find({
+//                 email: req.body.login,
+//                 senha: req.body.senha
+//           }).then(result => {
+//                 if (result.length !== 0) {
+//                     const user = result[0];
     
-                    var token = jwt.sign({ id: user._id }, segredo, {
-                        expiresIn: 300
-                    });
-                    console.log(user.adm)
-                    res.cookie("token", token);
-                    res.cookie("userid", user._id);
-                    if (user.adm === 1) {
-                        var tokenAdmin = jwt.sign(
-                        { id: user._id, senha: user.senha },
-                        segredoAdmin,
-                        {
-                            expiresIn: 300
-                        }
-                        );
+//                     var token = jwt.sign({ id: user._id }, segredo, {
+//                         expiresIn: 300
+//                     });
+//                     console.log(user.adm)
+//                     res.cookie("token", token);
+//                     res.cookie("userid", user._id);
+//                     if (user.adm === 1) {
+//                         var tokenAdmin = jwt.sign(
+//                         { id: user._id, senha: user.senha },
+//                         segredoAdmin,
+//                         {
+//                             expiresIn: 300
+//                         }
+//                         );
     
-                        res.cookie("admin", tokenAdmin);
-                    }
-                    res.status(200).render('home', {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]});
-                } 
-                else {
-                    res.render('index', {
-                        mensagem: ["Dados de cadastro incorretos!"]
-                    });
-                }
-            });
-        }
-      }
-  });
+//                         res.cookie("admin", tokenAdmin);
+//                     }
+//                     res.status(200).render('home', {email: [{email: user.email}], usuario: [{usuario: user._id}], datanasc: [{datanasc: user.datanasc}], pais: [{pais: user.pais}]});
+//                 } 
+//                 else {
+//                     res.render('index', {
+//                         mensagem: ["Dados de cadastro incorretos!"]
+//                     });
+//                 }
+//             });
+//         }
+//       }
+//   });
 
 
 //Projeto 3
